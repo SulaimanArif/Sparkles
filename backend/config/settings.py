@@ -21,12 +21,28 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 # ALLOWED_HOSTS configuration
 # Django validates the Host header against this list
 ALLOWED_HOSTS_STR = os.environ.get('ALLOWED_HOSTS', '')
+
+# Check if we're running on Render (has RENDER environment variable)
+IS_RENDER = os.environ.get('RENDER', '') == 'true'
+
 if ALLOWED_HOSTS_STR:
     ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_STR.split(',') if host.strip()]
-elif not DEBUG:
-    # Production: Allow all Render domains and common patterns
+elif not DEBUG or IS_RENDER:
+    # Production or Render: Allow all Render domains and common patterns
     # The '.onrender.com' pattern matches any subdomain
-    ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+    # Also include common proxy patterns
+    ALLOWED_HOSTS = [
+        '.onrender.com',
+        'localhost',
+        '127.0.0.1',
+    ]
+    
+    # If on Render and no explicit ALLOWED_HOSTS, be more permissive
+    if IS_RENDER and not ALLOWED_HOSTS_STR:
+        # Get the service name from Render's environment
+        render_service = os.environ.get('RENDER_SERVICE_NAME', '')
+        if render_service:
+            ALLOWED_HOSTS.append(f'{render_service}.onrender.com')
 else:
     # Development defaults
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
@@ -46,6 +62,12 @@ INSTALLED_APPS = [
     'corsheaders',
     'api',
 ]
+
+# Import allowed_hosts_fix early to override get_host() if on Render
+try:
+    import config.allowed_hosts_fix  # noqa
+except ImportError:
+    pass
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -85,12 +107,23 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Support PostgreSQL via DATABASE_URL (for Render/Heroku) or default to SQLite
+if os.environ.get('DATABASE_URL'):
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.environ.get('DATABASE_URL'),
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
