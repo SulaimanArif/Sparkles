@@ -23,10 +23,12 @@ else
     exit 1
 fi
 
+echo "Running migrations..."
+cd backend
+python manage.py migrate --noinput
+cd ..
+
 echo "Collecting static files..."
 python backend/manage.py collectstatic --noinput
-
-echo "Running migrations..."
-python backend/manage.py migrate --noinput
 
 echo "Build complete!"

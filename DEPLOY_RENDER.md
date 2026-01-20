@@ -36,24 +36,25 @@ git push origin main
 
 ### Build Command
 
-Use this build command (Render runs from repository root):
-
-```bash
-pip install --upgrade pip && pip install -r backend/requirements.txt && npm install --prefix frontend && npm run build --prefix frontend && python backend/manage.py collectstatic --noinput
-```
-
-**Alternative Build Command (if above doesn't work):**
-
-```bash
-pip install --upgrade pip && pip install -r backend/requirements.txt && cd frontend && npm install && npm run build && cd .. && python backend/manage.py collectstatic --noinput
-```
-
-**Or use the build script (recommended):**
+**Recommended: Use the build script**
 
 The simplest approach is to use the provided `build.sh` script. In Render, set the build command to:
 
 ```bash
 chmod +x build.sh && ./build.sh
+```
+
+This script will:
+- Install Python dependencies
+- Install Node.js dependencies
+- Build the React app
+- **Run database migrations automatically**
+- Collect static files
+
+**Manual Build Command (if not using script):**
+
+```bash
+pip install --upgrade pip && pip install -r backend/requirements.txt && npm install --prefix frontend && npm run build --prefix frontend && cd backend && python manage.py migrate --noinput && python manage.py collectstatic --noinput && cd ..
 ```
 
 Make sure `build.sh` is in your repository root and committed to Git.
