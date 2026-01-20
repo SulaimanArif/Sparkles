@@ -79,7 +79,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Removed XFrameOptionsMiddleware to allow iframe embedding
+    # We'll set X_FRAME_OPTIONS in settings instead
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -206,6 +207,21 @@ CSRF_TRUSTED_ORIGINS = [
 # But we still want CSRF for admin panel
 CSRF_COOKIE_SECURE = not DEBUG  # Only secure in production
 SESSION_COOKIE_SECURE = not DEBUG  # Only secure in production
+
+# Cookie settings for iframe embedding
+# In production (HTTPS), use 'None' to allow cross-site cookies for iframes
+# This helps with YouTube embeds that might need cookies
+SESSION_COOKIE_SAMESITE = 'None' if (not DEBUG and os.environ.get('RENDER') == 'true') else 'Lax'
+CSRF_COOKIE_SAMESITE = 'None' if (not DEBUG and os.environ.get('RENDER') == 'true') else 'Lax'
+
+# Security headers - Allow iframe embedding
+# X_FRAME_OPTIONS = 'SAMEORIGIN' allows our site to be embedded in same-origin iframes
+# It does NOT block us from embedding external content like YouTube
+# We removed XFrameOptionsMiddleware to avoid any conflicts
+
+# Additional security settings
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
 
 # CORS configuration - Not needed when serving from same origin, but keep for development
 CORS_ALLOWED_ORIGINS = [

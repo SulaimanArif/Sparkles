@@ -28,9 +28,9 @@ const VideoPlayer = ({ youtubeId, title, onClose }) => {
     );
   }
 
-  // Use the simplest possible embed URL - no parameters at all initially
-  // This minimizes the chance of configuration errors
-  const embedUrl = `https://www.youtube.com/embed/${youtubeId}`;
+  // Use YouTube privacy-enhanced embed (youtube-nocookie.com)
+  // This reduces cookie-related issues and Error 153
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0`;
 
   const handleIframeError = () => {
     setHasError(true);
@@ -72,8 +72,10 @@ const VideoPlayer = ({ youtubeId, title, onClose }) => {
               src={embedUrl}
               title={title}
               frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
+              credentialless="false"
+              referrerPolicy="no-referrer-when-downgrade"
               onError={handleIframeError}
             />
           )}
