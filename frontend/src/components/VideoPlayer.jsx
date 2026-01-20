@@ -1,17 +1,39 @@
+import { useState, useEffect } from 'react';
+
 const VideoPlayer = ({ youtubeId, title, onClose }) => {
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    // Reset error state when video changes
+    setHasError(false);
+  }, [youtubeId]);
+
   if (!youtubeId) return null;
 
-  // Build YouTube embed URL with proper parameters
-  // Removed 'origin' parameter to avoid YouTube Error 153
-  const getEmbedUrl = () => {
-    const baseUrl = `https://www.youtube.com/embed/${youtubeId}`;
-    const params = new URLSearchParams({
-      autoplay: '1',
-      rel: '0',
-      modestbranding: '1',
-    });
-    
-    return `${baseUrl}?${params.toString()}`;
+  // Validate YouTube ID format (should be 11 characters)
+  if (youtubeId.length !== 11) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg max-w-md w-full p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Invalid Video ID</h2>
+          <p className="text-gray-600 mb-4">The YouTube video ID is invalid.</p>
+          <button
+            onClick={onClose}
+            className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Use the simplest possible embed URL - no parameters at all initially
+  // This minimizes the chance of configuration errors
+  const embedUrl = `https://www.youtube.com/embed/${youtubeId}`;
+
+  const handleIframeError = () => {
+    setHasError(true);
   };
 
   return (
@@ -32,15 +54,29 @@ const VideoPlayer = ({ youtubeId, title, onClose }) => {
           </button>
         </div>
         <div className="relative pb-[56.25%] bg-black">
-          <iframe
-            className="absolute top-0 left-0 w-full h-full"
-            src={getEmbedUrl()}
-            title={title}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-            loading="lazy"
-          />
+          {hasError ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-white">
+              <p className="text-lg mb-4">Unable to load video</p>
+              <a
+                href={`https://www.youtube.com/watch?v=${youtubeId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg"
+              >
+                Watch on YouTube
+              </a>
+            </div>
+          ) : (
+            <iframe
+              className="absolute top-0 left-0 w-full h-full"
+              src={embedUrl}
+              title={title}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              onError={handleIframeError}
+            />
+          )}
         </div>
       </div>
     </div>
