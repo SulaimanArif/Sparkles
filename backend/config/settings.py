@@ -19,12 +19,17 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-produc
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 # ALLOWED_HOSTS configuration
+# Django validates the Host header against this list
 ALLOWED_HOSTS_STR = os.environ.get('ALLOWED_HOSTS', '')
 if ALLOWED_HOSTS_STR:
     ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_STR.split(',') if host.strip()]
+elif not DEBUG:
+    # Production: Allow all Render domains and common patterns
+    # The '.onrender.com' pattern matches any subdomain
+    ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 else:
-    # Default fallback - include common Render patterns
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
+    # Development defaults
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
