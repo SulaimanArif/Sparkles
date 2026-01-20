@@ -42,14 +42,14 @@ const PlaylistList = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-t-2 border-cyan-400 border-r-purple-500"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+      <div className="bg-red-900/50 border border-red-500/50 text-red-200 px-4 py-3 rounded-lg backdrop-blur-sm">
         {error}
       </div>
     );
@@ -57,8 +57,8 @@ const PlaylistList = () => {
 
   if (playlists.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-500 text-lg">No playlists yet. Create one to get started!</p>
+      <div className="text-center py-12 bg-indigo-900/20 backdrop-blur-sm rounded-xl border border-cyan-500/20 p-8">
+        <p className="text-purple-200 text-lg">No playlists yet. Create one to get started!</p>
       </div>
     );
   }

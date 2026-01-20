@@ -67,13 +67,15 @@ const AddVideoForm = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900">Add Video</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
+      <div className="bg-indigo-900/40 backdrop-blur-md rounded-2xl max-w-md w-full p-6 border border-cyan-500/30 shadow-2xl">
+        <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+          Add Video
+        </h2>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="youtubeUrl" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="youtubeUrl" className="block text-sm font-medium text-cyan-200 mb-2">
               YouTube URL
             </label>
             <input
@@ -82,19 +84,19 @@ const AddVideoForm = ({ onClose, onSuccess }) => {
               value={youtubeUrl}
               onChange={(e) => setYoutubeUrl(e.target.value)}
               placeholder="https://www.youtube.com/watch?v=..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 py-2 bg-indigo-900/30 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 text-white placeholder-purple-300"
               disabled={loading}
             />
           </div>
 
           <div className="mb-4">
-            <label htmlFor="playlist" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="playlist" className="block text-sm font-medium text-cyan-200 mb-2">
               Playlist
             </label>
             {loadingPlaylists ? (
-              <div className="text-gray-500">Loading playlists...</div>
+              <div className="text-purple-300">Loading playlists...</div>
             ) : playlists.length === 0 ? (
-              <div className="text-red-500 text-sm">
+              <div className="text-red-300 text-sm bg-red-900/30 p-2 rounded border border-red-500/30">
                 No playlists available. Please create a playlist first.
               </div>
             ) : (
@@ -102,11 +104,11 @@ const AddVideoForm = ({ onClose, onSuccess }) => {
                 id="playlist"
                 value={selectedPlaylist}
                 onChange={(e) => setSelectedPlaylist(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 bg-indigo-900/30 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 text-white"
                 disabled={loading}
               >
                 {playlists.map((playlist) => (
-                  <option key={playlist.id} value={playlist.id}>
+                  <option key={playlist.id} value={playlist.id} className="bg-indigo-900">
                     {playlist.name}
                   </option>
                 ))}
@@ -115,7 +117,7 @@ const AddVideoForm = ({ onClose, onSuccess }) => {
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+            <div className="mb-4 p-3 bg-red-900/50 border border-red-500/50 text-red-200 rounded-lg text-sm">
               {error}
             </div>
           )}
@@ -124,14 +126,14 @@ const AddVideoForm = ({ onClose, onSuccess }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-2 border border-cyan-500/30 rounded-lg text-cyan-200 hover:bg-indigo-900/50 transition-colors"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-lg hover:from-cyan-400 hover:to-purple-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/50"
               disabled={loading || loadingPlaylists || playlists.length === 0}
             >
               {loading ? 'Adding...' : 'Add Video'}

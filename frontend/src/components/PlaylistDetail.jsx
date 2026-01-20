@@ -11,23 +11,25 @@ const PlaylistDetail = ({ playlist }) => {
   const videos = playlist.videos || [];
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+    <div className="bg-indigo-900/30 backdrop-blur-md rounded-xl shadow-lg overflow-hidden mb-6 border border-cyan-500/20 hover:border-cyan-400/40 transition-all">
       <div
-        className="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+        className="p-4 cursor-pointer hover:bg-indigo-900/40 transition-colors"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <h2 className="text-xl font-bold text-gray-900">{playlist.name}</h2>
+            <h2 className="text-xl font-bold text-cyan-200">
+              {playlist.name}
+            </h2>
             {playlist.description && (
-              <p className="text-gray-600 mt-1">{playlist.description}</p>
+              <p className="text-purple-200 mt-1">{playlist.description}</p>
             )}
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-sm text-cyan-300 mt-2">
               {videos.length} video{videos.length !== 1 ? 's' : ''}
             </p>
           </div>
           <svg
-            className={`w-6 h-6 text-gray-500 transform transition-transform ${
+            className={`w-6 h-6 text-cyan-300 transform transition-transform ${
               isExpanded ? 'rotate-180' : ''
             }`}
             fill="none"
@@ -40,9 +42,11 @@ const PlaylistDetail = ({ playlist }) => {
       </div>
 
       {isExpanded && (
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-cyan-500/20 bg-indigo-900/20">
           {videos.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No videos in this playlist yet.</p>
+            <div className="text-center py-8">
+              <p className="text-purple-300">No videos in this playlist yet.</p>
+            </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {videos.map((video) => (

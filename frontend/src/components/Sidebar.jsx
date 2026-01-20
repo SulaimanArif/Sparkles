@@ -25,21 +25,23 @@ const Sidebar = ({ isOpen, onToggle }) => {
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-75 backdrop-blur-sm z-40 lg:hidden"
           onClick={onToggle}
         />
       )}
-      <aside className={`bg-gray-900 text-white h-screen fixed left-0 top-0 z-50 transition-all duration-300 flex flex-col ${
+      <aside className={`bg-space-dark border-r border-indigo-900/50 text-white h-screen fixed left-0 top-0 z-50 transition-all duration-300 flex flex-col backdrop-blur-sm ${
         isOpen ? 'w-64' : 'w-16'
       } ${!isOpen ? '-translate-x-full lg:translate-x-0' : ''} lg:block`}>
       {/* Logo */}
-      <div className="p-4 border-b border-gray-700 flex items-center justify-between">
+      <div className="p-4 border-b border-indigo-900/50 flex items-center justify-between bg-gradient-to-r from-indigo-900/20 to-purple-900/20">
         {isOpen && (
-          <h1 className="text-xl font-bold text-purple-400">✨ Sparkles</h1>
+          <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+            ✨ Sparkles
+          </h1>
         )}
         <button
           onClick={onToggle}
-          className="p-2 hover:bg-gray-800 rounded-lg transition-colors lg:block hidden"
+          className="p-2 hover:bg-indigo-900/30 rounded-lg transition-colors lg:block hidden text-cyan-300"
           aria-label="Toggle sidebar"
         >
           <svg
@@ -62,10 +64,10 @@ const Sidebar = ({ isOpen, onToggle }) => {
         <Link
           to="/"
           onClick={handleLinkClick}
-          className={`flex items-center px-4 py-3 transition-colors ${
+          className={`flex items-center px-4 py-3 transition-all ${
             isActive('/')
-              ? 'bg-purple-600 text-white'
-              : 'hover:bg-gray-800 text-gray-300'
+              ? 'bg-gradient-to-r from-indigo-600/50 to-purple-600/50 text-white border-l-4 border-cyan-400 shadow-lg shadow-cyan-500/20'
+              : 'hover:bg-indigo-900/20 text-cyan-100 border-l-4 border-transparent'
           }`}
         >
           <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,10 +79,10 @@ const Sidebar = ({ isOpen, onToggle }) => {
         <Link
           to="/videos"
           onClick={handleLinkClick}
-          className={`flex items-center px-4 py-3 transition-colors ${
+          className={`flex items-center px-4 py-3 transition-all ${
             isActive('/videos')
-              ? 'bg-purple-600 text-white'
-              : 'hover:bg-gray-800 text-gray-300'
+              ? 'bg-gradient-to-r from-indigo-600/50 to-purple-600/50 text-white border-l-4 border-cyan-400 shadow-lg shadow-cyan-500/20'
+              : 'hover:bg-indigo-900/20 text-cyan-100 border-l-4 border-transparent'
           }`}
         >
           <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,15 +93,15 @@ const Sidebar = ({ isOpen, onToggle }) => {
       </nav>
 
       {/* User Info and Logout */}
-      <div className="p-4 border-t border-gray-700 mt-auto">
+      <div className="p-4 border-t border-indigo-900/50 mt-auto bg-indigo-900/10">
         {isOpen && user && (
-          <div className="mb-3 px-4 py-2 text-sm text-gray-400">
-            Logged in as <span className="text-purple-400 font-semibold">{user.username}</span>
+          <div className="mb-3 px-4 py-2 text-sm text-cyan-200 bg-indigo-900/20 rounded-lg border border-cyan-500/20">
+            <span className="text-cyan-300 font-semibold">{user.username}</span>
           </div>
         )}
         <button
           onClick={handleLogout}
-          className="w-full flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 transition-colors rounded-lg"
+          className="w-full flex items-center px-4 py-3 text-cyan-200 hover:bg-indigo-900/30 transition-all rounded-lg border border-cyan-500/20 hover:border-cyan-400/40 hover:shadow-lg hover:shadow-cyan-500/20"
         >
           <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

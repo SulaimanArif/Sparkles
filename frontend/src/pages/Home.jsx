@@ -43,33 +43,39 @@ const Home = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 min-h-screen bg-space-gradient">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Welcome to Sparkles Video Platform</h1>
+        <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+          Welcome to ✨ Sparkles Video Platform
+        </h1>
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-t-2 border-cyan-400 border-r-purple-500"></div>
           </div>
         ) : (
           <>
             {/* Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6 shadow-lg">
+              <div className="bg-gradient-to-br from-indigo-900/50 to-purple-900/50 backdrop-blur-md text-white rounded-xl p-6 shadow-2xl border border-cyan-500/20 hover:border-cyan-400/40 transition-all hover:shadow-cyan-500/20">
                 <h2 className="text-2xl font-bold mb-2">Playlists</h2>
-                <p className="text-4xl font-bold">{stats.playlists}</p>
+                <p className="text-5xl font-bold text-cyan-300">{stats.playlists}</p>
               </div>
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6 shadow-lg">
+              <div className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 backdrop-blur-md text-white rounded-xl p-6 shadow-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all hover:shadow-purple-500/20">
                 <h2 className="text-2xl font-bold mb-2">Videos</h2>
-                <p className="text-4xl font-bold">{stats.videos}</p>
+                <p className="text-5xl font-bold text-purple-300">{stats.videos}</p>
               </div>
             </div>
 
             {/* Recent Videos Section */}
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Recent Videos</h2>
+              <h2 className="text-3xl font-bold text-cyan-200 mb-6">
+                Recent Videos
+              </h2>
               {recentVideos.length === 0 ? (
-                <p className="text-gray-500">No videos yet. Add some videos to see them here!</p>
+                <div className="bg-indigo-900/20 backdrop-blur-sm rounded-xl p-8 border border-cyan-500/20 text-center">
+                  <p className="text-purple-200 text-lg">No videos yet. Add some videos to see them here!</p>
+                </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {recentVideos.map((video) => (
