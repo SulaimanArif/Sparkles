@@ -71,6 +71,7 @@ except ImportError:
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'config.csrf_middleware.CSRFExemptAPIMiddleware',  # Exempt API from CSRF
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -193,6 +194,18 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100
 }
+
+# CSRF settings - exempt API endpoints since we're using token authentication
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.onrender.com',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
+
+# For API endpoints, we use token auth, so CSRF is not needed
+# But we still want CSRF for admin panel
+CSRF_COOKIE_SECURE = not DEBUG  # Only secure in production
+SESSION_COOKIE_SECURE = not DEBUG  # Only secure in production
 
 # CORS configuration - Not needed when serving from same origin, but keep for development
 CORS_ALLOWED_ORIGINS = [
