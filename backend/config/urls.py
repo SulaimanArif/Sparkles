@@ -17,17 +17,18 @@ urlpatterns = [
 # Serve static files
 react_build_dir = Path(settings.BASE_DIR).parent / 'frontend' / 'dist'
 
+# Always serve React build assets at /assets/ path (for both dev and production)
+if react_build_dir.exists():
+    assets_dir = react_build_dir / 'assets'
+    if assets_dir.exists():
+        urlpatterns += [
+            re_path(r'^assets/(?P<path>.*)$', serve, {'document_root': assets_dir}),
+        ]
+
+# Serve static files in development
 if settings.DEBUG:
-    # Serve React build assets at /assets/ path
     if react_build_dir.exists():
-        assets_dir = react_build_dir / 'assets'
-        if assets_dir.exists():
-            urlpatterns += [
-                re_path(r'^assets/(?P<path>.*)$', serve, {'document_root': assets_dir}),
-            ]
-        # Serve other static files from React build
         urlpatterns += static(settings.STATIC_URL, document_root=react_build_dir)
-    # Also serve from collected static files if they exist
     if settings.STATIC_ROOT.exists():
         urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

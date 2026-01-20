@@ -78,6 +78,14 @@ DEBUG=False
 ALLOWED_HOSTS=your-app-name.onrender.com
 ```
 
+**Important**: Replace `your-app-name.onrender.com` with your actual Render domain. You can find this in your Render service dashboard after deployment. For example, if your app is `sparkles-y5ff.onrender.com`, set:
+
+```
+ALLOWED_HOSTS=sparkles-y5ff.onrender.com
+```
+
+**Note**: The settings file now includes `.onrender.com` as a fallback pattern, so it should work even if you don't set ALLOWED_HOSTS, but it's better to be explicit.
+
 ### Optional Variables
 
 ```
