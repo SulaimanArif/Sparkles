@@ -30,7 +30,7 @@ const Landing = () => {
 
         <div className="bg-indigo-900/30 backdrop-blur-md rounded-2xl shadow-2xl p-8 mb-8 border border-cyan-500/20 hover:border-cyan-400/40 transition-all">
           <h2 className="text-2xl font-semibold text-cyan-200 mb-4">
-            Welcome to Sparkles
+            Sparkles
           </h2>
           <p className="text-purple-200 mb-6">
             Sign in here! (I love you)
