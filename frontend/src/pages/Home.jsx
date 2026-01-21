@@ -46,7 +46,7 @@ const Home = () => {
     <div className="p-6 min-h-screen bg-space-gradient">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-          Welcome to ✨ Sparkles Video Platform
+          From the same star.
         </h1>
 
         {loading ? (

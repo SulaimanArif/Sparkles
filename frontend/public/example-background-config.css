@@ -1,0 +1,35 @@
+/* Example: How to add a custom background image */
+/* Copy these styles into frontend/src/index.css in the #root section */
+
+/* Option 1: Simple background image */
+#root {
+  background-image: url('/your-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  /* Remove or comment out the gradient line above if using this */
+}
+
+/* Option 2: Background image with dark overlay (recommended for bright images) */
+#root {
+  background: linear-gradient(
+    rgba(10, 14, 39, 0.85),  /* Dark overlay - adjust opacity (0.0 to 1.0) */
+    rgba(26, 31, 58, 0.85)
+  ), url('/your-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Option 3: Multiple background layers (gradient + image) */
+#root {
+  background: 
+    linear-gradient(to bottom, rgba(10, 14, 39, 0.9) 0%, rgba(26, 31, 58, 0.8) 50%, rgba(10, 14, 39, 0.9) 100%),
+    url('/your-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}

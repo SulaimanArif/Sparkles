@@ -24,7 +24,7 @@ const Landing = () => {
       <div className="max-w-4xl w-full text-center relative z-10">
         <div className="mb-8">
           <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
-            ✨ Sparkles Video Platform
+            ✨ Sparkles
           </h1>
         </div>
 
@@ -33,7 +33,7 @@ const Landing = () => {
             Welcome to Sparkles
           </h2>
           <p className="text-purple-200 mb-6">
-            Please sign in to access your video playlists and start organizing your favorite content.
+            Sign in here! (I love you)
           </p>
           <Link
             to="/signin"

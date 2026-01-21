@@ -104,7 +104,7 @@ const SignIn = () => {
 
             <div className="text-center text-sm text-purple-300">
               <p>
-                Don't have an account? Contact your administrator to create one.
+                (I promise I love you)
               </p>
             </div>
           </form>
