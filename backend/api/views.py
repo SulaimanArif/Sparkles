@@ -8,11 +8,17 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from .models import Playlist, Video
 from .serializers import PlaylistSerializer, PlaylistListSerializer, VideoSerializer
+from .permissions import IsStaffUser
 
 
 class PlaylistViewSet(viewsets.ModelViewSet):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve', 'videos']:
+            return [AllowAny()]
+        return [IsAuthenticated(), IsStaffUser()]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -30,6 +36,11 @@ class PlaylistViewSet(viewsets.ModelViewSet):
 class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAuthenticated(), IsStaffUser()]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

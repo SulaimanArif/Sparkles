@@ -22,6 +22,18 @@ class VideoSerializer(serializers.ModelSerializer):
             )
         return value
 
+    def update(self, instance, validated_data):
+        youtube_url = validated_data.get('youtube_url')
+        if youtube_url:
+            from .models import extract_youtube_id
+            youtube_id = extract_youtube_id(youtube_url)
+            if youtube_id:
+                validated_data['youtube_id'] = youtube_id
+                validated_data['thumbnail_url'] = (
+                    f'https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg'
+                )
+        return super().update(instance, validated_data)
+
 
 class PlaylistSerializer(serializers.ModelSerializer):
     videos = VideoSerializer(many=True, read_only=True)
