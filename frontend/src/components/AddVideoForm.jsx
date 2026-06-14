@@ -50,7 +50,7 @@ const AddVideoForm = ({ onClose, onSuccess }) => {
       await videosAPI.create({
         youtube_url: youtubeUrl.trim(),
         playlist: parseInt(selectedPlaylist),
-        title: '', // Title will be auto-generated from YouTube ID
+        title: '', // Fetched automatically from YouTube on the server
       });
 
       setYoutubeUrl('');

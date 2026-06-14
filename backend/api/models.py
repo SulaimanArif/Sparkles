@@ -1,5 +1,8 @@
 from django.db import models
+import json
 import re
+from urllib.parse import quote
+from urllib.request import Request, urlopen
 
 
 def extract_youtube_id(url):
@@ -13,6 +16,21 @@ def extract_youtube_id(url):
         if match:
             return match.group(1)
     return None
+
+
+def fetch_youtube_title(youtube_url):
+    """Fetch the real video title from YouTube's oEmbed API (no API key required)."""
+    try:
+        oembed_url = (
+            f'https://www.youtube.com/oembed?url={quote(youtube_url, safe="")}&format=json'
+        )
+        request = Request(oembed_url, headers={'User-Agent': 'SparklesWebsite/1.0'})
+        with urlopen(request, timeout=8) as response:
+            data = json.loads(response.read().decode())
+            title = data.get('title', '').strip()
+            return title or None
+    except Exception:
+        return None
 
 
 class Playlist(models.Model):
@@ -49,9 +67,10 @@ class Video(models.Model):
         if self.youtube_id and not self.thumbnail_url:
             self.thumbnail_url = f'https://img.youtube.com/vi/{self.youtube_id}/maxresdefault.jpg'
         
-        # Set default title if empty
+        # Set title from YouTube if not provided
         if not self.title:
-            self.title = f'Video {self.youtube_id}'
+            fetched_title = fetch_youtube_title(self.youtube_url)
+            self.title = fetched_title or f'Video {self.youtube_id}'
         
         super().save(*args, **kwargs)
 

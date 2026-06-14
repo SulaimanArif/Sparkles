@@ -25,13 +25,17 @@ class VideoSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         youtube_url = validated_data.get('youtube_url')
         if youtube_url:
-            from .models import extract_youtube_id
+            from .models import extract_youtube_id, fetch_youtube_title
             youtube_id = extract_youtube_id(youtube_url)
             if youtube_id:
                 validated_data['youtube_id'] = youtube_id
                 validated_data['thumbnail_url'] = (
                     f'https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg'
                 )
+                if not str(validated_data.get('title', '')).strip():
+                    fetched_title = fetch_youtube_title(youtube_url)
+                    if fetched_title:
+                        validated_data['title'] = fetched_title
         return super().update(instance, validated_data)
 
 
