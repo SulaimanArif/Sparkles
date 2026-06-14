@@ -48,7 +48,7 @@ const PlaylistDetail = ({ playlist, onRefresh }) => {
     : [];
 
   return (
-    <div className="bg-indigo-900/30 backdrop-blur-md rounded-xl shadow-lg overflow-hidden mb-6 border border-cyan-500/20 hover:border-cyan-400/40 transition-all">
+    <div className="bg-indigo-900/30 backdrop-blur-md rounded-xl shadow-lg mb-6 border border-cyan-500/20 hover:border-cyan-400/40 transition-all">
       <div
         className="p-4 cursor-pointer hover:bg-indigo-900/40 transition-colors"
         onClick={() => setIsExpanded(!isExpanded)}

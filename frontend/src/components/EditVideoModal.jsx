@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { playlistsAPI, videosAPI } from '../services/api';
+import Portal from './Portal';
 
 const EditVideoModal = ({ video, onClose, onSuccess }) => {
   const [title, setTitle] = useState(video.title || '');
@@ -63,7 +64,8 @@ const EditVideoModal = ({ video, onClose, onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
+    <Portal>
+    <div className="fixed inset-0 bg-black bg-opacity-75 z-[200] flex items-center justify-center p-4">
       <div className="bg-indigo-900/40 backdrop-blur-md rounded-2xl max-w-md w-full p-6 border border-cyan-500/30 shadow-2xl">
         <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
           Edit Video
@@ -147,6 +149,7 @@ const EditVideoModal = ({ video, onClose, onSuccess }) => {
         </form>
       </div>
     </div>
+    </Portal>
   );
 };
 

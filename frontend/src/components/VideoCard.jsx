@@ -19,9 +19,9 @@ const VideoCard = ({ video, onClick, showMenu, onEdit, onDelete }) => {
   return (
     <div
       onClick={onClick}
-      className="bg-indigo-900/30 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden cursor-pointer transform transition-all duration-200 hover:scale-105 hover:shadow-cyan-500/30 border border-cyan-500/20 hover:border-cyan-400/50"
+      className="bg-indigo-900/30 backdrop-blur-sm rounded-xl shadow-lg cursor-pointer transition-all duration-200 hover:shadow-cyan-500/30 border border-cyan-500/20 hover:border-cyan-400/50"
     >
-      <div className="relative pb-[56.25%] bg-indigo-900/50">
+      <div className="relative pb-[56.25%] bg-indigo-900/50 overflow-hidden rounded-t-xl">
         <img
           src={video.thumbnail_url}
           alt={video.title}
