@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Playlist, Video
+from .models import Playlist, Video, ChatMessage
 
 
 class VideoSerializer(serializers.ModelSerializer):
@@ -54,3 +54,21 @@ class PlaylistListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Playlist
         fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'video_count']
+
+
+class ChatMessageSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
+
+    class Meta:
+        model = ChatMessage
+        fields = ['id', 'content', 'username', 'user_id', 'created_at']
+        read_only_fields = ['created_at']
+
+    def validate_content(self, value):
+        content = value.strip()
+        if not content:
+            raise serializers.ValidationError('Message cannot be empty.')
+        if len(content) > 2000:
+            raise serializers.ValidationError('Message is too long (max 2000 characters).')
+        return content

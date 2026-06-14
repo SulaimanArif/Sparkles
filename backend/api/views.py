@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -6,8 +6,13 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
-from .models import Playlist, Video
-from .serializers import PlaylistSerializer, PlaylistListSerializer, VideoSerializer
+from .models import Playlist, Video, ChatMessage
+from .serializers import (
+    PlaylistSerializer,
+    PlaylistListSerializer,
+    VideoSerializer,
+    ChatMessageSerializer,
+)
 from .permissions import IsStaffUser
 
 
@@ -60,6 +65,16 @@ class VideoViewSet(viewsets.ModelViewSet):
         serializer.save(youtube_id=youtube_id)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class ChatMessageViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = ChatMessage.objects.select_related('user').all()
+    serializer_class = ChatMessageSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = None
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 @api_view(['POST'])

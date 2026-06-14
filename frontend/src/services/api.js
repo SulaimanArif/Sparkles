@@ -51,4 +51,10 @@ export const videosAPI = {
   delete: (id) => api.delete(`/videos/${id}/`),
 };
 
+// Chat API
+export const chatAPI = {
+  getAll: () => api.get('/chat/'),
+  send: (content) => api.post('/chat/', { content }),
+};
+
 export default api;

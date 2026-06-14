@@ -105,6 +105,21 @@ const Sidebar = ({ isOpen, onToggle }) => {
           </svg>
           {isOpen && <span>Videos</span>}
         </Link>
+
+        <Link
+          to="/chat"
+          onClick={handleLinkClick}
+          className={`flex items-center px-4 py-3 transition-all ${
+            isActive('/chat')
+              ? 'bg-gradient-to-r from-indigo-600/50 to-purple-600/50 text-white border-l-4 border-cyan-400 shadow-lg shadow-cyan-500/20'
+              : 'hover:bg-indigo-900/20 text-cyan-100 border-l-4 border-transparent'
+          }`}
+        >
+          <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          {isOpen && <span>Chat</span>}
+        </Link>
       </nav>
 
       {/* User Info and Logout */}

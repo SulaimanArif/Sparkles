@@ -7,6 +7,7 @@ import SignIn from './pages/SignIn';
 import Home from './pages/Home';
 import Playlists from './pages/Playlists';
 import Videos from './pages/Videos';
+import Chat from './pages/Chat';
 
 function AuthenticatedLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(() => {
@@ -45,6 +46,7 @@ function AuthenticatedLayout() {
           <Route index element={<Home />} />
           <Route path="playlists" element={<Playlists />} />
           <Route path="videos" element={<Videos />} />
+          <Route path="chat" element={<Chat />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

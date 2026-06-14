@@ -1,16 +1,18 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
-    PlaylistViewSet, 
-    VideoViewSet, 
-    login_view, 
-    logout_view, 
-    check_auth_view
+    PlaylistViewSet,
+    VideoViewSet,
+    ChatMessageViewSet,
+    login_view,
+    logout_view,
+    check_auth_view,
 )
 
 router = DefaultRouter()
 router.register(r'playlists', PlaylistViewSet, basename='playlist')
 router.register(r'videos', VideoViewSet, basename='video')
+router.register(r'chat', ChatMessageViewSet, basename='chat')
 
 urlpatterns = [
     path('', include(router.urls)),
