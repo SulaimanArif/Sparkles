@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar';
 import Landing from './pages/Landing';
 import SignIn from './pages/SignIn';
 import Home from './pages/Home';
+import Playlists from './pages/Playlists';
 import Videos from './pages/Videos';
 
 function AuthenticatedLayout() {
@@ -42,6 +43,7 @@ function AuthenticatedLayout() {
         </button>
         <Routes>
           <Route index element={<Home />} />
+          <Route path="playlists" element={<Playlists />} />
           <Route path="videos" element={<Videos />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
