@@ -23,7 +23,12 @@ export const AuthProvider = ({ children }) => {
   const checkAuth = async () => {
     try {
       const response = await authAPI.checkAuth();
-      setUser(response.data);
+      const { user_id, username, is_admin } = response.data;
+      setUser({
+        id: user_id,
+        username,
+        is_admin: is_admin || false,
+      });
       setLoading(false);
     } catch (error) {
       // Token is invalid or expired

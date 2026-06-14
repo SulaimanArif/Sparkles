@@ -2,14 +2,10 @@ import { useState, useEffect } from 'react';
 import { playlistsAPI } from '../services/api';
 import PlaylistDetail from './PlaylistDetail';
 
-const PlaylistList = () => {
+const PlaylistList = ({ refreshKey = 0 }) => {
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    loadPlaylists();
-  }, []);
 
   const loadPlaylists = async () => {
     try {
@@ -17,8 +13,7 @@ const PlaylistList = () => {
       setError('');
       const response = await playlistsAPI.getAll();
       const playlistData = response.data.results || response.data;
-      
-      // Load videos for each playlist
+
       const playlistsWithVideos = await Promise.all(
         playlistData.map(async (playlist) => {
           try {
@@ -29,7 +24,7 @@ const PlaylistList = () => {
           }
         })
       );
-      
+
       setPlaylists(playlistsWithVideos);
     } catch (err) {
       setError('Failed to load playlists. Please try again later.');
@@ -38,6 +33,10 @@ const PlaylistList = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadPlaylists();
+  }, [refreshKey]);
 
   if (loading) {
     return (
@@ -66,7 +65,11 @@ const PlaylistList = () => {
   return (
     <div>
       {playlists.map((playlist) => (
-        <PlaylistDetail key={playlist.id} playlist={playlist} />
+        <PlaylistDetail
+          key={playlist.id}
+          playlist={playlist}
+          onRefresh={loadPlaylists}
+        />
       ))}
     </div>
   );

@@ -1,31 +1,28 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { playlistsAPI, videosAPI } from '../services/api';
 import VideoCard from '../components/VideoCard';
 import VideoPlayer from '../components/VideoPlayer';
+import EditVideoModal from '../components/EditVideoModal';
 
 const Home = () => {
+  const { isAdmin } = useAuth();
   const [stats, setStats] = useState({ playlists: 0, videos: 0 });
   const [recentVideos, setRecentVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState(null);
-
-  useEffect(() => {
-    loadData();
-  }, []);
+  const [editingVideo, setEditingVideo] = useState(null);
 
   const loadData = async () => {
     try {
       setLoading(true);
-      
-      // Load playlists count
+
       const playlistsResponse = await playlistsAPI.getAll();
       const playlists = playlistsResponse.data.results || playlistsResponse.data;
-      
-      // Load all videos
+
       const videosResponse = await videosAPI.getAll();
       const videos = videosResponse.data.results || videosResponse.data;
-      
-      // Sort by added_at and take the 6 most recent
+
       const sortedVideos = [...videos]
         .sort((a, b) => new Date(b.added_at) - new Date(a.added_at))
         .slice(0, 6);
@@ -42,6 +39,20 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const handleDeleteVideo = async (video) => {
+    try {
+      await videosAPI.delete(video.id);
+      loadData();
+    } catch (err) {
+      alert('Failed to delete video. Please try again.');
+      console.error(err);
+    }
+  };
+
   return (
     <div className="p-6 min-h-screen bg-space-gradient">
       <div className="max-w-7xl mx-auto">
@@ -55,7 +66,6 @@ const Home = () => {
           </div>
         ) : (
           <>
-            {/* Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="bg-gradient-to-br from-indigo-900/50 to-purple-900/50 backdrop-blur-md text-white rounded-xl p-6 shadow-2xl border border-cyan-500/20 hover:border-cyan-400/40 transition-all hover:shadow-cyan-500/20">
                 <h2 className="text-2xl font-bold mb-2">Playlists</h2>
@@ -67,7 +77,6 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Recent Videos Section */}
             <div className="mb-8">
               <h2 className="text-3xl font-bold text-cyan-200 mb-6">
                 Recent Videos
@@ -83,6 +92,9 @@ const Home = () => {
                       key={video.id}
                       video={video}
                       onClick={() => setSelectedVideo(video)}
+                      showMenu={isAdmin}
+                      onEdit={setEditingVideo}
+                      onDelete={handleDeleteVideo}
                     />
                   ))}
                 </div>
@@ -96,6 +108,17 @@ const Home = () => {
             youtubeId={selectedVideo.youtube_id}
             title={selectedVideo.title}
             onClose={() => setSelectedVideo(null)}
+          />
+        )}
+
+        {editingVideo && (
+          <EditVideoModal
+            video={editingVideo}
+            onClose={() => setEditingVideo(null)}
+            onSuccess={() => {
+              setEditingVideo(null);
+              loadData();
+            }}
           />
         )}
       </div>

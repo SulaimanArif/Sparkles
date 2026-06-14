@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 const Sidebar = ({ isOpen, onToggle }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
 
   const isActive = (path) => location.pathname === path;
 
@@ -97,6 +97,11 @@ const Sidebar = ({ isOpen, onToggle }) => {
         {isOpen && user && (
           <div className="mb-3 px-4 py-2 text-sm text-cyan-200 bg-indigo-900/20 rounded-lg border border-cyan-500/20">
             <span className="text-cyan-300 font-semibold">{user.username}</span>
+            {isAdmin && (
+              <span className="ml-2 text-xs bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded border border-cyan-500/30">
+                Staff
+              </span>
+            )}
           </div>
         )}
         <button
