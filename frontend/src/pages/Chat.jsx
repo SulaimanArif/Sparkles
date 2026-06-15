@@ -25,12 +25,13 @@ const Chat = () => {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
-  const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const shouldAutoScroll = useRef(true);
 
   const scrollToBottom = (behavior = 'smooth') => {
-    messagesEndRef.current?.scrollIntoView({ behavior });
+    const container = messagesContainerRef.current;
+    if (!container) return;
+    container.scrollTo({ top: container.scrollHeight, behavior });
   };
 
   const loadMessages = useCallback(async (isInitial = false) => {
@@ -103,7 +104,7 @@ const Chat = () => {
       lastDate = messageDate;
 
       return (
-        <div key={message.id}>
+        <div key={message.id} className="min-w-0">
           {showDate && (
             <div className="flex justify-center my-4">
               <span className="text-xs text-purple-300 bg-indigo-900/40 px-3 py-1 rounded-full border border-cyan-500/20">
@@ -111,13 +112,17 @@ const Chat = () => {
               </span>
             </div>
           )}
-          <div className={`flex mb-3 ${isOwn ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[75%] sm:max-w-[65%] ${isOwn ? 'items-end' : 'items-start'} flex flex-col`}>
+          <div className={`flex mb-3 min-w-0 ${isOwn ? 'justify-end' : 'justify-start'}`}>
+            <div
+              className={`min-w-0 max-w-[85%] sm:max-w-[70%] flex flex-col ${
+                isOwn ? 'items-end' : 'items-start'
+              }`}
+            >
               {!isOwn && (
                 <span className="text-xs text-cyan-300 mb-1 ml-1">{message.username}</span>
               )}
               <div
-                className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap break-words ${
+                className={`w-full min-w-0 px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap break-words [overflow-wrap:anywhere] [word-break:break-word] ${
                   isOwn
                     ? 'bg-gradient-to-r from-cyan-600/80 to-purple-600/80 text-white rounded-br-md'
                     : 'bg-indigo-900/50 text-cyan-50 border border-cyan-500/20 rounded-bl-md'
@@ -125,7 +130,7 @@ const Chat = () => {
               >
                 {message.content}
               </div>
-              <span className={`text-[10px] text-purple-400 mt-1 ${isOwn ? 'mr-1' : 'ml-1'}`}>
+              <span className={`text-[10px] text-purple-400 mt-1 shrink-0 ${isOwn ? 'mr-1' : 'ml-1'}`}>
                 {formatTime(message.created_at)}
               </span>
             </div>
@@ -136,41 +141,40 @@ const Chat = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-space-gradient flex flex-col">
-      <div className="max-w-3xl mx-auto w-full flex flex-col flex-1 min-h-0">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent shrink-0">
+    <div className="h-full min-h-0 flex flex-col overflow-hidden p-4 sm:p-6 box-border bg-space-gradient">
+      <div className="max-w-3xl mx-auto w-full h-full flex flex-col min-h-0 overflow-hidden">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent shrink-0">
           Chat
         </h1>
 
-        <div className="flex-1 flex flex-col min-h-0 bg-indigo-900/20 backdrop-blur-md rounded-2xl border border-cyan-500/20 shadow-xl overflow-hidden">
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden bg-indigo-900/20 backdrop-blur-md rounded-2xl border border-cyan-500/20 shadow-xl">
           <div
             ref={messagesContainerRef}
             onScroll={handleScroll}
-            className="flex-1 overflow-y-auto p-4 min-h-[50vh] lg:min-h-0"
+            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-4"
           >
             {loading ? (
-              <div className="flex items-center justify-center h-full">
+              <div className="flex items-center justify-center h-full min-h-[12rem]">
                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-t-2 border-cyan-400 border-r-purple-500"></div>
               </div>
             ) : messages.length === 0 ? (
-              <div className="flex items-center justify-center h-full text-center">
+              <div className="flex items-center justify-center h-full min-h-[12rem] text-center">
                 <p className="text-purple-300">No messages yet. Say hello!</p>
               </div>
             ) : (
               renderMessages()
             )}
-            <div ref={messagesEndRef} />
           </div>
 
           {error && (
-            <div className="px-4 py-2 bg-red-900/40 border-t border-red-500/30 text-red-200 text-sm">
+            <div className="shrink-0 px-4 py-2 bg-red-900/40 border-t border-red-500/30 text-red-200 text-sm break-words">
               {error}
             </div>
           )}
 
           <form
             onSubmit={handleSubmit}
-            className="p-4 border-t border-cyan-500/20 bg-indigo-900/30 flex gap-3 items-end"
+            className="shrink-0 p-4 border-t border-cyan-500/20 bg-indigo-900/30 flex gap-3 items-end"
           >
             <textarea
               value={newMessage}
@@ -183,7 +187,7 @@ const Chat = () => {
               }}
               placeholder="Type a message..."
               rows={1}
-              className="flex-1 px-4 py-3 bg-indigo-900/40 border border-cyan-500/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 text-white placeholder-purple-300 resize-none min-h-[48px] max-h-32"
+              className="flex-1 min-w-0 px-4 py-3 bg-indigo-900/40 border border-cyan-500/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 text-white placeholder-purple-300 resize-none min-h-[48px] max-h-32 break-words"
               disabled={sending}
             />
             <button

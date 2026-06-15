@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Sidebar from './components/Sidebar';
@@ -10,6 +10,8 @@ import Videos from './pages/Videos';
 import Chat from './pages/Chat';
 
 function AuthenticatedLayout() {
+  const location = useLocation();
+  const isChatPage = location.pathname === '/chat';
   const [sidebarOpen, setSidebarOpen] = useState(() => {
     // Default to open on desktop, closed on mobile
     return window.innerWidth >= 1024;
@@ -31,7 +33,7 @@ function AuthenticatedLayout() {
   return (
     <div className="flex min-h-screen bg-space-gradient">
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
-      <main className={`flex-1 transition-all duration-300 lg:ml-64 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'} relative`}>
+      <main className={`flex-1 h-screen transition-all duration-300 lg:ml-64 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'} relative ${isChatPage ? 'overflow-hidden' : 'overflow-y-auto'}`}>
         {/* Mobile menu button */}
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
